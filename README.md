@@ -1,5 +1,5 @@
-# path-finding-visualizer
-CS5800 final project (A* vs Dijkstra)
+# Path Finding Visualizer
+CS5800 final project (A* vs Dijkstra) 
 
 # How to Play
 - `git clone https://github.com/ycleo/path-finding-visualizer.git`
@@ -11,3 +11,8 @@ CS5800 final project (A* vs Dijkstra)
 - Execute the path-finding algorithm
   - Press `a` -> A* algorithm
   - Press `d` -> Dijkstra algorithm
+- Press `c` to reset the visualizer
+
+# Tool
+- Python3
+- Pygame
