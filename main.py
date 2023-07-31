@@ -134,7 +134,7 @@ def get_clicked_pos(pos, rows, width):
 	return row, col
 
 
-def main(win, width, algo):
+def main(win, width):
 	ROWS = 50
 	grid = make_grid(ROWS, width)
 
@@ -177,15 +177,17 @@ def main(win, width, algo):
 					end = None
 
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_SPACE and start and end:
+				if (event.key == pygame.K_a or event.key == pygame.K_d) and start and end:
 					start_time = time.time()  # Record the start time
 					for row in grid:
 						for spot in row:
 							spot.update_neighbors(grid)
 
-					if algo == 'astar':
+					if event.key == pygame.K_a:
+						algo = "A*"
 						astar(lambda: draw(win, grid, ROWS, width), grid, start, end)
-					elif algo == 'dijkstra': 
+					elif event.key == pygame.K_d: 
+						algo = "Dijkstra"
 						pass  # dijkstra algorithm
 
 					# Calculate and store the time taken
@@ -199,5 +201,4 @@ def main(win, width, algo):
 
 	pygame.quit()
 
-algo = sys.argv[1]
-main(WIN, WIDTH, algo)
+main(WIN, WIDTH)
