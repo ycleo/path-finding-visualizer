@@ -1,12 +1,11 @@
 import pygame
-import sys
+import time
 
 from astar import *
 
 WIDTH = 800
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
 pygame.display.set_caption("Path Finding Visualizer")
-clock = pygame.time.Clock()
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -109,6 +108,9 @@ def draw_grid(win, rows, width):
 		for j in range(rows):
 			pygame.draw.line(win, GREY, (j * gap, 0), (j * gap, width))
 
+def draw_clock(win, time_taken):
+    font = pygame.font.Font(None, 24)
+    text = font.render(f"Time taken: {time_taken:.3f} seconds", True, BLACK)
 
 def draw(win, grid, rows, width):
 	win.fill(WHITE)
@@ -132,15 +134,16 @@ def get_clicked_pos(pos, rows, width):
 
 
 def main(win, width):
-	
 	ROWS = 50
 	grid = make_grid(ROWS, width)
 
 	start = None
 	end = None
 
-	run = True
-	
+	start_time = 0
+	time_taken = 0
+
+	run = True 
 	while run:
 		draw(win, grid, ROWS, width)
 		for event in pygame.event.get():
@@ -174,11 +177,16 @@ def main(win, width):
 
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_SPACE and start and end:
+					start_time = time.time()  # Record the start time
 					for row in grid:
 						for spot in row:
 							spot.update_neighbors(grid)
 
 					astar(lambda: draw(win, grid, ROWS, width), grid, start, end)
+
+					# Calculate and store the time taken
+					time_taken = time.time() - start_time
+					print(f"A* Algorithm took {time_taken:.3f} seconds")
 
 				if event.key == pygame.K_c:
 					start = None
