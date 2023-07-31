@@ -1,5 +1,6 @@
 import pygame
 import time
+import sys
 
 from astar import *
 
@@ -133,7 +134,7 @@ def get_clicked_pos(pos, rows, width):
 	return row, col
 
 
-def main(win, width):
+def main(win, width, algo):
 	ROWS = 50
 	grid = make_grid(ROWS, width)
 
@@ -182,11 +183,14 @@ def main(win, width):
 						for spot in row:
 							spot.update_neighbors(grid)
 
-					astar(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					if algo == 'astar':
+						astar(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					elif algo == 'dijkstra': 
+						pass  # dijkstra algorithm
 
 					# Calculate and store the time taken
 					time_taken = time.time() - start_time
-					print(f"A* Algorithm took {time_taken:.3f} seconds")
+					print(f"{algo} Algorithm took {time_taken:.3f} seconds")
 
 				if event.key == pygame.K_c:
 					start = None
@@ -195,4 +199,5 @@ def main(win, width):
 
 	pygame.quit()
 
-main(WIN, WIDTH)
+algo = sys.argv[1]
+main(WIN, WIDTH, algo)
