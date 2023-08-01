@@ -22,7 +22,7 @@ def path_finding(algo, draw, grid, start, end):
 	g_score = {spot: float("inf") for row in grid for spot in row}
 	g_score[start] = 0
 	f_score = {spot: float("inf") for row in grid for spot in row}
-	f_score[start] = h(start.get_pos(), end.get_pos())
+	f_score[start] = h(start.get_pos(), end.get_pos()) if algo == "A*" else 0
 
 	open_set_hash = {start}
 
@@ -34,21 +34,26 @@ def path_finding(algo, draw, grid, start, end):
 		current = open_set.get()[2]
 		open_set_hash.remove(current)
 
-		if current == end:
-			reconstruct_path(came_from, end, draw)
-			end.make_end()
-			return True
+		# if current == end:
+		# 	reconstruct_path(came_from, end, draw)
+		# 	end.make_end()
+		# 	return True
 
 		for neighbor in current.neighbors:
+			if neighbor == end:
+				came_from[end] = current
+				reconstruct_path(came_from, end, draw)
+				return True
+			
 			temp_g_score = g_score[current] + 1
 
 			if temp_g_score < g_score[neighbor]:
 				came_from[neighbor] = current
 				g_score[neighbor] = temp_g_score
+				f_score[neighbor] = temp_g_score
 				if algo == 'A*':
-					f_score[neighbor] = temp_g_score + h(neighbor.get_pos(), end.get_pos())
-				else:
-					f_score[neighbor] = temp_g_score
+					f_score[neighbor] += h(neighbor.get_pos(), end.get_pos())
+
 				if neighbor not in open_set_hash:
 					count += 1
 					open_set.put((f_score[neighbor], count, neighbor))
