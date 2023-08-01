@@ -10,7 +10,8 @@ def h(p1, p2):
 def reconstruct_path(came_from, current, draw):
 	while current in came_from:
 		current = came_from[current]
-		current.make_path()
+		if not current.is_start():
+			current.make_path()
 		draw()
 
 def astar(draw, grid, start, end):
