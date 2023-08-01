@@ -2,7 +2,7 @@ import pygame
 import time
 import sys
 
-from astar import *
+from algo import *
 
 WIDTH = 800
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
@@ -99,8 +99,7 @@ def make_grid(rows, width):
 			spot = Spot(i, j, gap, rows)
 			grid[i].append(spot)
 
-	return grid
-
+	return grid			
 
 def draw_grid(win, rows, width):
 	gap = width // rows
@@ -123,6 +122,16 @@ def draw(win, grid, rows, width):
 	draw_grid(win, rows, width)
 	pygame.display.update()
 
+def clear_path(win, grid, rows, width):
+	win.fill(WHITE)
+
+	for row in grid:
+		for spot in row:
+			if not (spot.is_start() or spot.is_end() or spot.is_barrier()):
+				spot.reset()
+	
+	draw_grid(win, rows, width)
+	pygame.display.update()
 
 def get_clicked_pos(pos, rows, width):
 	gap = width // rows
@@ -185,10 +194,10 @@ def main(win, width):
 
 					if event.key == pygame.K_a:
 						algo = "A*"
-						astar(lambda: draw(win, grid, ROWS, width), grid, start, end)
 					elif event.key == pygame.K_d: 
 						algo = "Dijkstra"
-						pass  # dijkstra algorithm
+					
+					path_finding(algo, lambda: draw(win, grid, ROWS, width), grid, start, end)
 
 					# Calculate and store the time taken
 					time_taken = time.time() - start_time
@@ -198,6 +207,9 @@ def main(win, width):
 					start = None
 					end = None
 					grid = make_grid(ROWS, width)
+				
+				if event.key == pygame.K_b:
+					clear_path(win, grid, ROWS, width)
 
 	pygame.quit()
 

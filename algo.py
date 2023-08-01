@@ -14,7 +14,7 @@ def reconstruct_path(came_from, current, draw):
 			current.make_path()
 		draw()
 
-def astar(draw, grid, start, end):
+def path_finding(algo, draw, grid, start, end):
 	count = 0
 	open_set = PriorityQueue()
 	open_set.put((0, count, start))
@@ -45,7 +45,10 @@ def astar(draw, grid, start, end):
 			if temp_g_score < g_score[neighbor]:
 				came_from[neighbor] = current
 				g_score[neighbor] = temp_g_score
-				f_score[neighbor] = temp_g_score + h(neighbor.get_pos(), end.get_pos())
+				if algo == 'A*':
+					f_score[neighbor] = temp_g_score + h(neighbor.get_pos(), end.get_pos())
+				else:
+					f_score[neighbor] = temp_g_score
 				if neighbor not in open_set_hash:
 					count += 1
 					open_set.put((f_score[neighbor], count, neighbor))
