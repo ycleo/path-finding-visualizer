@@ -3,6 +3,7 @@ import time
 import sys
 
 from astar import *
+from dijkstra import *
 
 WIDTH = 800
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
@@ -188,7 +189,7 @@ def main(win, width):
 						astar(lambda: draw(win, grid, ROWS, width), grid, start, end)
 					elif event.key == pygame.K_d: 
 						algo = "Dijkstra"
-						pass  # dijkstra algorithm
+						dijkstra(lambda: draw(win, grid, ROWS, width), grid, start, end)
 
 					# Calculate and store the time taken
 					time_taken = time.time() - start_time
